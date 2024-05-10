@@ -1,0 +1,13 @@
+image: nixos/unstable
+sources:
+  - https://git.alanpearce.eu/nix-packages
+environment:
+  NIX_CONFIG: "experimental-features = nix-command flakes"
+repositories:
+  nixpkgs: https://nixos.org/channels/nixpkgs-unstable
+tasks:
+  - nixpkgs: |
+      nix-instantiate --eval -E '(import <nixpkgs> {}).lib.version'
+
+  - build: |
+      nix shell -f '<nixpkgs>' nix-build-uncached -c nix-build-uncached nix-packages/ci.nix -A cacheOutputs
