@@ -11,7 +11,6 @@ buildGoModule rec {
     owner = "a-h";
     repo = "htmlformat";
     rev = "5bd994fe268e4d505a9793143fa85414c7d50887";
-    hash = "sha256-YSl9GsXhc0L2oKGZLwwjUtpe5W6ra6kk74zvQdsDCMU=";
     sha256 = "1i880gdl3vwcxwjajsxbdvjmxnjj4c62z6d1l3v44wz1qld7sab1";
     # date = "2023-11-08T12:46:58+00:00";
   };

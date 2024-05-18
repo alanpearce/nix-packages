@@ -15,4 +15,5 @@
   overlays = import ./overlays; # nixpkgs overlays
 
   prettier-plugin-go-template = pkgs.callPackage ./pkgs/prettier-plugin-go-template { };
+  htmlformat = pkgs.callPackage ./pkgs/htmlformat { };
 }
