@@ -20,4 +20,4 @@ tasks:
   - push-cache: |
       nix copy --substitute-on-destination \
         --to ssh://nixremote@linde.alanpearce.eu \
-        .
+        ./nix-packages
