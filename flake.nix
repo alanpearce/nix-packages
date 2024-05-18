@@ -28,7 +28,7 @@
 
           all = pkgs.symlinkJoin {
             name = "all";
-            paths = builtins.attrValues lpkgs;
+            paths = (import ./ci.nix { inherit pkgs; }).cachePkgs;
           };
         in
         (lpkgs // {
