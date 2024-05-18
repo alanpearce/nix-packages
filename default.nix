@@ -19,4 +19,5 @@
   enchant-configurable = pkgs.callPackage ./pkgs/enchant-configurable {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
+  emacs-unlimited-select = pkgs.callPackage ./pkgs/emacs-unlimited-select { };
 }
