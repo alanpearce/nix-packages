@@ -6,10 +6,6 @@ on:
 
 jobs:
   tests:
-    strategy:
-      matrix:
-        nixPath:
-          - nixpkgs=channel:nixos-unstable
     runs-on: macos-latest
     steps:
       - name: Install SSH Key
@@ -25,9 +21,7 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v26
         with:
-          nix_path: "${{ matrix.nixPath }}"
-          extra_nix_config: |
-            experimental-features = nix-command flakes
+          nix_path: nixpkgs=channel:nixos-unstable
       - name: Check evaluation
         run: |
           nix-env -f . -qa \* --meta --xml \
@@ -43,4 +37,3 @@ jobs:
         run: nix shell -f '<nixpkgs>' nix-build-uncached -c nix-build-uncached ci.nix -A cacheOutputs
       - name: Populate binary cache
         run: nix copy --substitute-on-destination --to ssh://nixremote@linde.alanpearce.eu .
-
