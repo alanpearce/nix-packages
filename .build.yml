@@ -1,8 +1,13 @@
 image: nixos/unstable
 sources:
   - https://git.alanpearce.eu/nix-packages
+secrets:
+  - 5a04c7f9-bba4-40ab-b54c-a2daae2989e8
 environment:
-  NIX_CONFIG: "experimental-features = nix-command flakes"
+  NIX_CONFIG: |
+    experimental-features = nix-command flakes
+    extra-substituters = https://binarycache.alanpearce.eu
+    extra-trusted-public-keys = binarycache.alanpearce.eu:ZwqO3XMuajPictjwih8OY2+RXnOKpjZEZFHJjGSxAI4=
 repositories:
   nixpkgs: https://nixos.org/channels/nixpkgs-unstable
 tasks:
@@ -11,3 +16,8 @@ tasks:
 
   - build: |
       nix shell -f '<nixpkgs>' nix-build-uncached -c nix-build-uncached nix-packages/ci.nix -A cacheOutputs
+
+  - push-cache: |
+      nix copy --substitute-on-destination \
+        --to ssh://nixremote@linde.alanpearce.eu \
+        .
