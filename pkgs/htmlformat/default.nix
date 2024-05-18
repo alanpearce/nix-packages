@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "htmlformat";
   version = "unstable-2023-11-08";
 
