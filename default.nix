@@ -16,4 +16,7 @@
 
   prettier-plugin-go-template = pkgs.callPackage ./pkgs/prettier-plugin-go-template { };
   htmlformat = pkgs.callPackage ./pkgs/htmlformat { };
+  enchant-configurable = pkgs.callPackage ./pkgs/enchant-configurable {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+  };
 }
