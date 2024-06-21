@@ -108,6 +108,10 @@ in
       };
     };
 
+    environment.systemPackages = [
+      pkgs.laminar
+    ];
+
     users.users = optionalAttrs (cfg.user == "laminar") {
       laminar = {
         inherit (cfg) group;
