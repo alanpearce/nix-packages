@@ -1,7 +1,7 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,7 +15,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gDIUYhc+GWbQsn5DihnBJdOJ45zdwm24J2ZD2jEwGyE=";
   };
 
-  cargoHash = "sha256-lgvuiVCcFrnawmj/dNn/SzUj5k8LVNQ649eqOSDbJbQ=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-SdxTiIrsK3U4mcrcilOhMkkp12yEUkWlXmlT+C75dZw=";
 
   meta = {
     description = "Fastest(?) disk usage cli, similar to windirstat";
