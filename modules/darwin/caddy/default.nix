@@ -331,7 +331,7 @@ in
 
     launchd.daemons.caddy =
       let
-        runOptions = ''--config ${configPath} ${
+        runOptions = ''--config ${configFile} ${
           optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"
         }'';
       in
