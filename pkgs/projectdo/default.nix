@@ -10,18 +10,15 @@
   just,
   nix,
 }:
-let
-  rev = "8de1acb1975d3811b8c3a8f175c8dfabd800da10";
-in
 stdenv.mkDerivation rec {
   pname = "projectdo";
-  version = "unstable-2025-03-08";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "paldepind";
     repo = "projectdo";
-    inherit rev;
-    hash = "sha256-WAhw5meVs7k4oaQFyS4LxG7TIrNK8Tl+hSAiFzdeZVM=";
+    rev = "v${version}";
+    hash = "sha256-17rODM82pt8IdzBeRVQSGJqQo9DAJl1qO9RvFX6zRGA=";
   };
 
   dontConfigure = true;
