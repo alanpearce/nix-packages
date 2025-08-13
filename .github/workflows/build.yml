@@ -17,7 +17,7 @@ jobs:
           known_hosts: |
             linde.alanpearce.eu ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHHdh3J7dEmh9G+CVmzFEC8/ont35ZXpCFcpLUO863vC
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
