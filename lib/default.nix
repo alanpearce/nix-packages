@@ -1,4 +1,4 @@
-{ }:
+{ ... }:
 
 {
   # Add your library functions here
