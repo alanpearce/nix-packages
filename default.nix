@@ -18,6 +18,5 @@
 
   dirstat-rs = pkgs.callPackage ./pkgs/dirstat-rs { };
   htmlformat = pkgs.callPackage ./pkgs/htmlformat { };
-  porto = pkgs.callPackage ./pkgs/porto { };
   projectdo = pkgs.callPackage ./pkgs/projectdo { };
 }
