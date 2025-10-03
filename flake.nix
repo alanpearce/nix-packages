@@ -1,56 +1,73 @@
 {
   description = "My personal NUR repository";
+
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+  inputs.flake-parts.url = "github:hercules-ci/flake-parts";
+
   outputs =
-    { self, nixpkgs }:
-    let
-      systems = [
-        "x86_64-linux"
-        "i686-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-        "aarch64-linux"
-        "armv6l-linux"
-        "armv7l-linux"
-      ];
-      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
-    in
-    {
-      overlays = {
-        default = import ./overlay.nix;
-      };
-      legacyPackages = forAllSystems (
-        system:
-        (import ./default.nix {
-          pkgs = import nixpkgs { inherit system; };
-        })
-      );
-      nixosModules = {
-        laminar = ./modules/nixos/laminar.nix;
-      };
-      darwinModules = {
-        caddy = ./modules/darwin/caddy;
-      };
-      packages = forAllSystems (
-        system:
-        let
-          pkgs = import nixpkgs { inherit system; };
+    inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } (
+      { ... }:
+      {
+        imports = [
+          inputs.flake-parts.flakeModules.modules
+        ];
 
-          lpkgs = nixpkgs.lib.filterAttrs (_: v: nixpkgs.lib.isDerivation v) self.legacyPackages.${system};
+        systems = [
+          "x86_64-linux"
+          "i686-linux"
+          "x86_64-darwin"
+          "aarch64-darwin"
+          "aarch64-linux"
+          "armv6l-linux"
+          "armv7l-linux"
+        ];
+        perSystem =
+          {
+            self',
+            pkgs,
+            lib,
+            ...
+          }:
+          {
+            legacyPackages = (import ./default.nix { inherit pkgs; });
 
-          all = pkgs.symlinkJoin {
-            name = "all";
-            paths = (import ./ci.nix { inherit pkgs; }).cachePkgs;
+            packages = (
+              let
+                inherit pkgs;
+
+                lpkgs = lib.filterAttrs (_: v: lib.isDerivation v) self'.legacyPackages;
+
+                all = pkgs.symlinkJoin {
+                  name = "all";
+                  paths = (import ./ci.nix { inherit pkgs; }).cachePkgs;
+                };
+              in
+              (
+                lpkgs
+                // {
+                  inherit all;
+                  default = all;
+                }
+              )
+            );
+
+            formatter = pkgs.nixfmt-tree;
           };
-        in
-        (
-          lpkgs
-          // {
-            inherit all;
-            default = all;
-          }
-        )
-      );
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
-    };
+        flake = {
+          overlays = {
+            default = import ./overlay.nix;
+          };
+
+          modules = {
+            nixos = {
+              laminar = ./modules/nixos/laminar.nix;
+            };
+            darwin = {
+              caddy = ./modules/darwin/caddy;
+            };
+          };
+        };
+      }
+    );
 }
