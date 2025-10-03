@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "projectdo";
-  version = "0.2.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "paldepind";
     repo = "projectdo";
     rev = "v${version}";
-    hash = "sha256-17rODM82pt8IdzBeRVQSGJqQo9DAJl1qO9RvFX6zRGA=";
+    hash = "sha256-bdSwpfHipL1fuXjvVifaKNV477JENYu7SxKMpk3ZP6o=";
   };
 
   dontConfigure = true;
