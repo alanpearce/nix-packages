@@ -17,7 +17,6 @@
   overlays = import ./overlays; # nixpkgs overlays
 
   dirstat-rs = pkgs.callPackage ./pkgs/dirstat-rs { };
-  go-instrument = pkgs.callPackage ./pkgs/go-instrument { };
   htmlformat = pkgs.callPackage ./pkgs/htmlformat { };
   porto = pkgs.callPackage ./pkgs/porto { };
   projectdo = pkgs.callPackage ./pkgs/projectdo { };
