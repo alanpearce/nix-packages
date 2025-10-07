@@ -147,60 +147,60 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.services =
-      {
-        laminar = {
-          description = "Laminar continuous integration service";
-          wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
-          inherit (cfg) path;
-          environment = {
-            XDG_RUNTIME_DIR = "%t/laminar";
-          };
-          serviceConfig = {
-            User = cfg.user;
-            Group = cfg.group;
-            ExecStart = "${cfg.package}/bin/laminard -v";
-            RuntimeDirectory = "laminar";
-            EnvironmentFile = pkgs.writeText "laminar.conf" ''
-              LAMINAR_HOME=${cfg.homeDir}
-              LAMINAR_BIND_HTTP=${cfg.settings.bindHTTP}
-              LAMINAR_BIND_RPC=${cfg.settings.bindRPC}
-              LAMINAR_TITLE=${cfg.settings.title}
-              LAMINAR_KEEP_RUNDIRS=${toString cfg.settings.keepRundirs}
-              LAMINAR_BASE_URL=${cfg.settings.baseURL}
-              ${lib.optionalString (
-                cfg.settings.archiveURL != null
-              ) "LAMINAR_ARCHIVE_URL=${cfg.settings.archiveURL}"}
-            '';
-          };
-          unitConfig = {
-            Documentation = [
-              "man:laminard(8)"
-              "https://laminar.ohwg.net/docs.html"
-            ];
-          };
+    systemd.services = {
+      laminar = {
+        description = "Laminar continuous integration service";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        inherit (cfg) path;
+        environment = {
+          XDG_RUNTIME_DIR = "%t/laminar";
         };
-      }
-      // (mapAttrs' (name: job: {
-        name = "laminar-job-${name}";
-        value = {
-          description = "Runs laminar CI job.";
-          path = [
-            cfg.package
-            "/run/wrappers"
-          ] ++ cfg.path;
-          environment = {
-            LAMINAR_REASON = job.reason;
-          };
-          serviceConfig = {
-            User = cfg.user;
-            Group = cfg.group;
-            Type = "oneshot";
-            ExecStart = "${cfg.package}/bin/laminarc run ${name}";
-          };
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          ExecStart = "${cfg.package}/bin/laminard -v";
+          RuntimeDirectory = "laminar";
+          EnvironmentFile = pkgs.writeText "laminar.conf" ''
+            LAMINAR_HOME=${cfg.homeDir}
+            LAMINAR_BIND_HTTP=${cfg.settings.bindHTTP}
+            LAMINAR_BIND_RPC=${cfg.settings.bindRPC}
+            LAMINAR_TITLE=${cfg.settings.title}
+            LAMINAR_KEEP_RUNDIRS=${toString cfg.settings.keepRundirs}
+            LAMINAR_BASE_URL=${cfg.settings.baseURL}
+            ${lib.optionalString (
+              cfg.settings.archiveURL != null
+            ) "LAMINAR_ARCHIVE_URL=${cfg.settings.archiveURL}"}
+          '';
         };
-      }) cfg.timers);
+        unitConfig = {
+          Documentation = [
+            "man:laminard(8)"
+            "https://laminar.ohwg.net/docs.html"
+          ];
+        };
+      };
+    }
+    // (mapAttrs' (name: job: {
+      name = "laminar-job-${name}";
+      value = {
+        description = "Runs laminar CI job.";
+        path = [
+          cfg.package
+          "/run/wrappers"
+        ]
+        ++ cfg.path;
+        environment = {
+          LAMINAR_REASON = job.reason;
+        };
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          Type = "oneshot";
+          ExecStart = "${cfg.package}/bin/laminarc run ${name}";
+        };
+      };
+    }) cfg.timers);
     systemd.timers = (
       mapAttrs' (name: job: {
         name = "laminar-job-${name}";
