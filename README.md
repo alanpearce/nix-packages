@@ -15,6 +15,8 @@
 
 ## Modules
 ### NixOS
+- git-pr
+
 - laminar
 
 ### Darwin

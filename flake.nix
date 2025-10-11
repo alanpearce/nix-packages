@@ -135,6 +135,7 @@
           modules = {
             nixos = {
               laminar = ./modules/nixos/laminar.nix;
+              git-pr = ./modules/nixos/git-pr.nix;
             };
             darwin = {
               caddy = ./modules/darwin/caddy;
