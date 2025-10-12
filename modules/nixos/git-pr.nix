@@ -142,6 +142,16 @@ in
           ExecStart = "${cfg.package}/bin/git-pr --config ${configFile}";
           ExecStartPre = "${pkgs.coreutils}/bin/install -d -m 755 ${cfg.homeDir}/data";
           Restart = "always";
+
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ];
+        }
+        // lib.optionalAttrs (cfg.settings.web_port < 1024 || cfg.settings.ssh_port < 1024) {
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+          CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         };
     };
   };
