@@ -251,7 +251,7 @@ in
             Type = if realTime then "simple" else "oneshot";
             ExecStart = "${cfg.package}/bin/goaccess --config-file=${configFile}";
             ExecStartPre = "+" + pkgs.writeShellScript "goaccess-${name}-prep" ''
-              install -d -o ${cfg.user} -g ${cfg.group} ${dirOf instanceCfg.settings.output}
+              install -d -o ${cfg.user} -g ${cfg.group} -m 0750 ${dirOf instanceCfg.settings.output}
             '';
             User = cfg.user;
             Group = cfg.group;
@@ -267,9 +267,7 @@ in
             ProtectHome = true;
             ReadOnlyPaths =  (lib.flatten instanceCfg.settings.log-file);
             ReadWritePaths = [
-              (instanceCfg.settings.db-path)
-              (dirOf instanceCfg.settings.output)
-              "/run/goaccess/"
+              ("-" + dirOf instanceCfg.settings.output)
             ];
           };
         }
@@ -289,7 +287,6 @@ in
       systemd.tmpfiles.rules = lib.flatten (lib.mapAttrsToList
       (name: icfg: [
         "d ${icfg.settings.db-path} 1700 ${cfg.user} ${cfg.group} -"
-        "d ${(dirOf icfg.settings.output)} 1700 ${cfg.user} ${cfg.group}} -"
       ])
       (lib.filterAttrs (_: icfg: icfg.settings.persist || icfg.settings.restore) enabledInstances));
     }
